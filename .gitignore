@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+build/
+server/dist/
+
+# Environment — secrets must never be committed.
+# Only .env.example belongs in version control.
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+!.env.example
+
+# TypeScript incremental build info
+*.tsbuildinfo
+node_modules/.tmp/
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+
+# Caches
+.cache/
+.vite/
+.eslintcache
+
+# Local tooling
+.claude/

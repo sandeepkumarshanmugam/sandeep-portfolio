@@ -1,0 +1,327 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Design tokens
+   Tailwind v4 CSS-first configuration. Everything below is exposed as a
+   utility (e.g. `bg-bg`, `text-fg-muted`, `border-hairline`) and as a raw
+   CSS variable (e.g. `var(--color-accent)`) for gradients and shadows.
+   ========================================================================== */
+
+@theme {
+  /* --- Surfaces: black dominates -------------------------------------- */
+  --color-bg: #030507;
+  --color-bg-alt: #070c12;
+  --color-surface: #0a1118;
+  --color-surface-raised: #0e1720;
+
+  /* --- Crystal blue: accent only -------------------------------------- */
+  --color-accent: #00bfff;
+  --color-accent-bright: #35d9ff;
+  --color-accent-soft: #69e3ff;
+
+  /* --- Type ------------------------------------------------------------ */
+  --color-fg: #f5f9ff;
+  --color-fg-secondary: #9aa7b4;
+  /* Lightened from the brief's #66727E, which measured 3.99:1 in the footer
+     and 4.15:1 on cards against these backgrounds — below the 4.5:1 WCAG AA
+     minimum for small text. This value measures ~5.5:1 on the lightest
+     surface and keeps a clear three-step hierarchy (19.3 / 8.3 / 5.5). */
+  --color-fg-muted: #808c99;
+
+  /* --- Lines ----------------------------------------------------------- */
+  --color-hairline: rgb(255 255 255 / 0.08);
+  --color-hairline-strong: rgb(255 255 255 / 0.14);
+  --color-hairline-accent: rgb(0 191 255 / 0.2);
+
+  /* --- Feedback -------------------------------------------------------- */
+  --color-danger: #ff6b6b;
+  --color-success: #4ade80;
+
+  /* --- Typography ------------------------------------------------------ */
+  --font-sans:
+    'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
+
+  /* Fluid display sizes. clamp() keeps headings proportional from 360px
+     to 1600px without a cascade of breakpoint overrides. */
+  --text-display: clamp(2.5rem, 1.2rem + 5.6vw, 5.5rem);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.035em;
+
+  --text-h1: clamp(2rem, 1.1rem + 3.6vw, 3.75rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
+
+  --text-h2: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.02em;
+
+  --text-h3: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+
+  --text-lead: clamp(1rem, 0.95rem + 0.4vw, 1.1875rem);
+  --text-lead--line-height: 1.65;
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.18em;
+
+  /* --- Motion ---------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- Layout ---------------------------------------------------------- */
+  --spacing-gutter: clamp(1.25rem, 0.5rem + 3vw, 4rem);
+  --container-content: 76rem;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Offset in-page anchor targets so the fixed header never covers them. */
+    scroll-padding-top: 6rem;
+    /* `clip` rather than `hidden`: it contains the oversized decorative glows
+       without creating a scroll container, so `position: sticky` and the fixed
+       header keep working. Set on html as well as body because body-level
+       overflow is propagated to the viewport in some engines. */
+    overflow-x: clip;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent horizontal scroll from decorative glows that bleed off-canvas. */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Media defaults */
+  img,
+  picture,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Consistent, always-visible focus ring. Uses :focus-visible so mouse
+     users don't see it, keyboard users always do. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Remove the default ring only where we draw our own. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background-color: rgb(0 191 255 / 0.28);
+    color: var(--color-fg);
+  }
+
+  /* Form controls inherit type instead of falling back to system fonts. */
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-fg-muted);
+  }
+
+  /* Firefox shows a red ring on :invalid before the user has typed. */
+  input:invalid,
+  textarea:invalid {
+    box-shadow: none;
+  }
+
+  /* Scrollbar, dark-tuned. */
+  @supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #16202b;
+      border: 2px solid var(--color-bg);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1f2c3a;
+    }
+  }
+
+  * {
+    scrollbar-color: #16202b var(--color-bg);
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Thin gradient rule that fades at both ends — used to separate sections
+   without the heaviness of a full-width border. */
+@utility rule-fade {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-hairline-strong) 15%,
+    var(--color-hairline-strong) 85%,
+    transparent
+  );
+}
+
+/* A very subtle blue wash behind a panel. Deliberately low alpha: the glow
+   should read as light in the room, not neon. */
+@utility accent-wash {
+  background:
+    radial-gradient(
+      120% 100% at 50% 0%,
+      rgb(0 191 255 / 0.07) 0%,
+      transparent 62%
+    ),
+    var(--color-surface);
+}
+
+@utility text-gradient-accent {
+  background: linear-gradient(
+    100deg,
+    var(--color-fg) 0%,
+    var(--color-accent-soft) 55%,
+    var(--color-accent) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ==========================================================================
+   Decorative background grid
+   Rendered once in the layout, fixed, extremely low contrast.
+   ========================================================================== */
+
+.bg-technical-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  /* Fade the grid out toward the edges so it never terminates in a hard line. */
+  mask-image: radial-gradient(
+    ellipse 100% 70% at 50% 0%,
+    black 20%,
+    transparent 78%
+  );
+}
+
+/* ==========================================================================
+   Reduced motion
+   Honour the OS setting globally: decorative animation stops, transitions
+   collapse to near-instant, and parallax/scroll effects are neutralised.
+   Individual components additionally check the `usePrefersReducedMotion`
+   hook so Motion-driven animations are skipped rather than merely sped up.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Purely ornamental layers add nothing without motion. */
+  [data-decorative='motion'] {
+    display: none !important;
+  }
+}
+
+/* Slow, restrained ambient drift for the portrait halo. Paused entirely
+   under reduced motion by the rule above. */
+@keyframes halo-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(0, -1.25%, 0) scale(1.03);
+    opacity: 0.75;
+  }
+}
+
+@keyframes scroll-hint {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(9px);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-late {
+  to {
+    opacity: 1;
+  }
+}

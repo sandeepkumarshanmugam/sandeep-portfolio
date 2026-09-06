@@ -1,0 +1,13 @@
+{
+  "name": "Sandeepkumar S — Web Developer & AI/ML Enthusiast",
+  "short_name": "Sandeepkumar S",
+  "description": "Portfolio of Sandeepkumar S, an undergraduate IT student in Coimbatore building for the web and exploring AI/ML.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030507",
+  "theme_color": "#030507",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
