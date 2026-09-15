@@ -84,9 +84,8 @@ export function Portrait() {
             sizes="(max-width: 1024px) min(80vw, 22rem), 26rem"
             width={640}
             height={800}
-            alt={`${profile.name}, wearing a dark blazer, standing with arms folded`}
-            // Above the fold and preloaded in index.html: eager and high
-            // priority, never lazy.
+            alt={`${profile.name} in a dark blazer, buttoning his jacket and looking to the side`}
+            // Above the fold: eager and high priority, never lazy.
             loading="eager"
             fetchPriority="high"
             decoding="async"
